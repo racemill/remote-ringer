@@ -1,0 +1,71 @@
+<html>
+	<head>
+		<title>BELL RINGER</title>
+
+		<style>
+
+		body {
+			background-image: url("https://wallpapertag.com/wallpaper/full/6/7/5/456833-gorgerous-pine-tree-wallpaper-2560x1600.jpg");
+			content-align: center;
+		}
+
+		#main {
+			background: rgba(0, 0, 0, 0.6);
+		}
+
+		.center {
+			text-align: center;
+			width: 50%;
+			color: white;
+		}
+
+		</style>
+
+		<script>
+			// This function is called to send a POST request 
+			// in order to tell the server to ring the bell
+			function sendRingRequest() {
+				
+				// Set up ajax request
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					var currentNotifs = document.getElementById("bellnotifs").innerHTML;
+
+					// Upon receiving 200 from server, notify user that bell has been rung
+					if (this.readyState == 4 && this.status == 200) {
+						var newNotifs = "</br>Bell successfully rang";
+						document.getElementById("bellnotifs").innerHTML = currentNotifs + newNotifs;
+					} 
+
+					// Upon receiving 428 from server, notify user that bell has not been rung
+					if (this.readyState == 4 && this.status == 429) {
+						var newNotifs = "</br>Bell currently being rang, wait a moment and try again...";
+						document.getElementById("bellnotifs").innerHTML = currentNotifs + newNotifs;
+					}
+
+				};
+
+				xhttp.open("POST", "ring", true);
+				xhttp.send();
+			}
+		</script>
+
+	</head>
+
+	<center>
+	<body>
+
+		<div class="center" id="main">
+
+			<center>
+			<h1 class="center">BELL-RINGER</h1>
+			</center>
+
+			<button type="button" onclick="sendRingRequest()">RING THAT BELL</button>
+
+			<p class="center" id="bellnotifs"></p>
+		</div>
+
+	</body>
+	</center>
+</html>
