@@ -3,10 +3,12 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 import ringUtils
+import logging
 
 homepagePath = "/usr/local/bell-ringer/index.html"
 hostName = "192.168.1.150"
 serverPort = 80
+logging.basicConfig(filename='/var/log/bell.log', format=' %(message)s %(asctime)s', datefmt='%I:%M:%S %p %m/%d/%Y', level=logging.DEBUG)
 
 class BellServer(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -16,8 +18,9 @@ class BellServer(BaseHTTPRequestHandler):
 
         self.send_response(404)
            
-    def do_POST(self):
+    def do_POST(self):   # This is where you land when pressing the "RING THAT BELL" button on web page.
         if self.path == "/ring":
+            logging.info('Web Site Ring Request')
             self.handleRingBellRequest();
 
     def handleHomepageRequest(self):
@@ -29,6 +32,7 @@ class BellServer(BaseHTTPRequestHandler):
 
     def handleRingBellRequest(self):
         if ringUtils.ringOnce():
+            logging.info('    Bell go BONG to honor Web Request')
             self.send_response(200)
         else:
             self.send_response(429)
@@ -38,6 +42,7 @@ class BellServer(BaseHTTPRequestHandler):
 def run_server():
     webServer = HTTPServer((hostName, serverPort), BellServer)
     print("Server started http://%s:%s" % (hostName, serverPort))
+    logging.info('Server Started.....................')
 
     try:
         webServer.serve_forever()
