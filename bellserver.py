@@ -20,7 +20,8 @@ class BellServer(BaseHTTPRequestHandler):
            
     def do_POST(self):   # This is where you land when pressing the "RING THAT BELL" button on web page.
         if self.path == "/ring":
-            logging.info('Web Site Ring Request')
+            logging.info("Web Ring Request from %s at  ", self.client_address[0])
+            print(" Client Address=", self.client_address[0])
             self.handleRingBellRequest();
 
     def handleHomepageRequest(self):
@@ -32,7 +33,7 @@ class BellServer(BaseHTTPRequestHandler):
 
     def handleRingBellRequest(self):
         if ringUtils.ringOnce():
-            logging.info('    Bell go BONG to honor Web Request')
+            logging.info('    Bell went BONG to honor Web Request ')
             self.send_response(200)
         else:
             self.send_response(429)
@@ -42,7 +43,7 @@ class BellServer(BaseHTTPRequestHandler):
 def run_server():
     webServer = HTTPServer((hostName, serverPort), BellServer)
     print("Server started http://%s:%s" % (hostName, serverPort))
-    logging.info('Server Started.....................')
+    logging.info('Server Started..........................')
 
     try:
         webServer.serve_forever()

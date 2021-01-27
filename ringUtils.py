@@ -29,7 +29,7 @@ def initialize():
      GPIO.add_event_detect(BUTTON, GPIO.FALLING, callback=button_callback)
 
 def button_callback(channel):
-    logging.info('Button on Bell-Ringer box pressed')
+    logging.info('Button on Bell-Ringer box pressed at    ')
     print("Button pressed!")
     ringOnce()
 
